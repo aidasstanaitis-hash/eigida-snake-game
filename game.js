@@ -6,6 +6,13 @@ const overlay = document.querySelector("#overlay");
 const overlayTitle = document.querySelector("#overlayTitle");
 const overlayText = document.querySelector("#overlayText");
 const startButton = document.querySelector("#startButton");
+const scoreForm = document.querySelector("#scoreForm");
+const playerNameInput = document.querySelector("#playerName");
+const saveScoreButton = document.querySelector("#saveScoreButton");
+const scoreStatus = document.querySelector("#scoreStatus");
+const leaderboardList = document.querySelector("#leaderboardList");
+const leaderboardEmpty = document.querySelector("#leaderboardEmpty");
+const refreshLeaderboard = document.querySelector("#refreshLeaderboard");
 
 const grid = 18;
 const tile = canvas.width / grid;
@@ -57,6 +64,7 @@ let running;
 let ended;
 let frameId;
 let foodsEaten;
+let scoreSubmitted;
 
 function loadBestScore() {
   try {
@@ -85,6 +93,7 @@ function resetGame() {
   nextDirection = { x: 1, y: 0 };
   score = 0;
   foodsEaten = 0;
+  scoreSubmitted = false;
   speed = startSpeed;
   running = true;
   ended = false;
@@ -562,6 +571,9 @@ function loop(timestamp) {
 function startGame() {
   cancelAnimationFrame(frameId);
   resetGame();
+  scoreForm.classList.add("is-hidden");
+  scoreStatus.textContent = "";
+  saveScoreButton.disabled = false;
   overlay.classList.add("is-hidden");
   draw();
   frameId = requestAnimationFrame(loop);
@@ -573,8 +585,110 @@ function endGame() {
   cancelAnimationFrame(frameId);
   overlayTitle.textContent = "Žaidimas baigtas";
   overlayText.textContent = `Surinkai ${score} taškų. Eigidos baldai ir direktoriaus bonusas laukia revanšo.`;
+  scoreForm.classList.toggle("is-hidden", score <= 0);
+  scoreStatus.textContent = score > 0 ? "Įrašyk vardą ir pateksi į bendrą TOP lentelę." : "";
+  playerNameInput.value = loadPlayerName();
   startButton.textContent = "Žaisti dar kartą";
   overlay.classList.remove("is-hidden");
+
+  if (score > 0) {
+    setTimeout(() => playerNameInput.focus(), 80);
+  }
+}
+
+function loadPlayerName() {
+  try {
+    return localStorage.getItem("eigidaSnakePlayer") || "";
+  } catch {
+    return "";
+  }
+}
+
+function savePlayerName(name) {
+  try {
+    localStorage.setItem("eigidaSnakePlayer", name);
+  } catch {
+    // Optional convenience only.
+  }
+}
+
+async function loadLeaderboard() {
+  try {
+    const response = await fetch("/api/leaderboard", { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Nepavyko gauti rezultatų.");
+    }
+
+    const data = await response.json();
+    renderLeaderboard(data.entries || []);
+  } catch {
+    leaderboardList.replaceChildren();
+    leaderboardEmpty.textContent = "Rezultatų lentelė laikinai nepasiekiama.";
+    leaderboardEmpty.classList.remove("is-hidden");
+  }
+}
+
+function renderLeaderboard(entries) {
+  leaderboardList.replaceChildren();
+  leaderboardEmpty.textContent = "Dar nėra rezultatų. Būk pirmas.";
+  leaderboardEmpty.classList.toggle("is-hidden", entries.length > 0);
+
+  entries.forEach(entry => {
+    const row = document.createElement("li");
+    const name = document.createElement("span");
+    const points = document.createElement("span");
+
+    name.className = "leaderboard-name";
+    points.className = "leaderboard-score";
+    name.textContent = entry.name;
+    points.textContent = `${entry.score} tšk.`;
+
+    row.append(name, points);
+    leaderboardList.append(row);
+  });
+}
+
+async function submitScore(event) {
+  event.preventDefault();
+
+  if (scoreSubmitted || score <= 0) {
+    return;
+  }
+
+  const name = playerNameInput.value.trim();
+
+  if (!name) {
+    scoreStatus.textContent = "Įvesk vardą.";
+    return;
+  }
+
+  scoreSubmitted = true;
+  saveScoreButton.disabled = true;
+  scoreStatus.textContent = "Saugau rezultatą...";
+
+  try {
+    const response = await fetch("/api/leaderboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, score })
+    });
+
+    if (!response.ok) {
+      throw new Error("Nepavyko išsaugoti.");
+    }
+
+    const data = await response.json();
+    savePlayerName(name);
+    renderLeaderboard(data.entries || []);
+    scoreStatus.textContent = "Rezultatas įrašytas.";
+  } catch {
+    scoreSubmitted = false;
+    saveScoreButton.disabled = false;
+    scoreStatus.textContent = "Nepavyko išsaugoti. Bandyk dar kartą.";
+  }
 }
 
 document.addEventListener("keydown", event => {
@@ -611,9 +725,12 @@ document.querySelectorAll("[data-dir]").forEach(button => {
 });
 
 startButton.addEventListener("click", startGame);
+scoreForm.addEventListener("submit", submitScore);
+refreshLeaderboard.addEventListener("click", loadLeaderboard);
 
 bestScore = loadBestScore();
 bestScoreEl.textContent = bestScore;
 resetGame();
 running = false;
 draw();
+loadLeaderboard();

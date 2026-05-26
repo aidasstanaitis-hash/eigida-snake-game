@@ -1,0 +1,275 @@
+:root {
+  color-scheme: light;
+  --ink: #152025;
+  --muted: #5b6970;
+  --panel: #ffffff;
+  --line: #d7e2df;
+  --field: #edf5ef;
+  --field-dark: #dfece5;
+  --green: #15803d;
+  --green-dark: #0f5e31;
+  --yellow: #f2b705;
+  --red: #d94141;
+  --blue: #2563eb;
+  --shadow: 0 22px 70px rgba(22, 42, 38, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    linear-gradient(135deg, rgba(21, 128, 61, 0.12), transparent 32%),
+    linear-gradient(315deg, rgba(217, 65, 65, 0.10), transparent 30%),
+    #f7faf8;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  width: min(1120px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px;
+  display: grid;
+  place-items: center;
+}
+
+.game-panel {
+  width: 100%;
+  display: grid;
+  gap: 18px;
+}
+
+.top-bar,
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(145deg, var(--green), var(--green-dark));
+  border: 3px solid #fff;
+  box-shadow: var(--shadow);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.brand p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.stats {
+  display: flex;
+  gap: 10px;
+}
+
+.stats div {
+  min-width: 98px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(22, 42, 38, 0.08);
+}
+
+.stats span,
+.keyboard-controls span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.stats strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.board-wrap {
+  position: relative;
+  width: min(78vh, 100%);
+  max-width: 720px;
+  aspect-ratio: 1;
+  justify-self: center;
+  background: var(--field);
+  border: 10px solid #fff;
+  box-shadow: var(--shadow);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--field);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(247, 250, 248, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.overlay.is-hidden {
+  display: none;
+}
+
+.overlay-card {
+  width: min(380px, 100%);
+  padding: 24px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 18px 50px rgba(22, 42, 38, 0.18);
+}
+
+.overlay-card h2 {
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.overlay-card p {
+  margin-top: 10px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.overlay-card button {
+  margin-top: 20px;
+  width: 100%;
+  min-height: 48px;
+  color: #fff;
+  font-weight: 800;
+  border: 0;
+  border-radius: 8px;
+  background: var(--green);
+  cursor: pointer;
+}
+
+.overlay-card button:hover {
+  background: var(--green-dark);
+}
+
+.keyboard-controls,
+.touch-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+kbd,
+.touch-controls button {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  font-weight: 800;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(22, 42, 38, 0.08);
+}
+
+.touch-controls button {
+  cursor: pointer;
+}
+
+.touch-controls button:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 760px) {
+  .game-shell {
+    padding: 16px;
+    align-items: start;
+  }
+
+  .top-bar,
+  .controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .brand {
+    align-items: flex-start;
+  }
+
+  .brand-mark {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    font-size: 28px;
+  }
+
+  .stats {
+    width: 100%;
+  }
+
+  .stats div {
+    flex: 1;
+  }
+
+  .board-wrap {
+    width: 100%;
+    border-width: 6px;
+  }
+
+  .keyboard-controls {
+    display: none;
+  }
+
+  .touch-controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .touch-controls button {
+    width: 100%;
+    height: 48px;
+  }
+}

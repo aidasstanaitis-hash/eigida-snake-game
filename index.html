@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="lt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eigidos gyvatėlė</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="game-panel" aria-label="Eigidos gyvatėlės žaidimas">
+      <header class="top-bar">
+        <div class="brand">
+          <span class="brand-mark">E</span>
+          <div>
+            <h1>Eigidos gyvatėlė</h1>
+            <p>Gaudyk Eigidos baldus, augink gyvatėlę, neatsitrenk į sienas.</p>
+          </div>
+        </div>
+        <div class="stats" aria-label="Žaidimo rezultatai">
+          <div>
+            <span>Taškai</span>
+            <strong id="score">0</strong>
+          </div>
+          <div>
+            <span>Rekordas</span>
+            <strong id="bestScore">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="board-wrap">
+        <canvas id="game" width="720" height="720" aria-label="Gyvatėlės lenta"></canvas>
+        <div id="overlay" class="overlay">
+          <div class="overlay-card">
+            <h2 id="overlayTitle">Pasiruošęs?</h2>
+            <p id="overlayText">Spausk pradėti ir maitink gyvatėlę stalais, kėdėmis, spintomis ir bonusais.</p>
+            <button id="startButton" type="button">Pradėti</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="controls">
+        <div class="keyboard-controls" aria-label="Valdymas klaviatūra">
+          <span>Valdymas</span>
+          <kbd>↑</kbd>
+          <kbd>←</kbd>
+          <kbd>↓</kbd>
+          <kbd>→</kbd>
+          <kbd>W</kbd>
+          <kbd>A</kbd>
+          <kbd>S</kbd>
+          <kbd>D</kbd>
+        </div>
+        <div class="touch-controls" aria-label="Valdymas lietimu">
+          <button type="button" data-dir="up" aria-label="Aukštyn">↑</button>
+          <button type="button" data-dir="left" aria-label="Kairėn">←</button>
+          <button type="button" data-dir="down" aria-label="Žemyn">↓</button>
+          <button type="button" data-dir="right" aria-label="Dešinėn">→</button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

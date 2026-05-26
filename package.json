@@ -1,0 +1,12 @@
+{
+  "name": "eigidos-gyvatele",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Eigidos produktu Snake zaidimas.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

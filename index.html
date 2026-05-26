@@ -35,10 +35,27 @@
           <div class="overlay-card">
             <h2 id="overlayTitle">Pasiruošęs?</h2>
             <p id="overlayText">Spausk pradėti ir maitink gyvatėlę stalais, kėdėmis, spintomis ir bonusais.</p>
+            <form id="scoreForm" class="score-form is-hidden">
+              <label for="playerName">Tavo vardas</label>
+              <div class="score-submit">
+                <input id="playerName" name="playerName" type="text" maxlength="24" autocomplete="name" placeholder="Pvz. Aidas" required>
+                <button id="saveScoreButton" type="submit">Įrašyti</button>
+              </div>
+              <p id="scoreStatus" class="score-status" aria-live="polite"></p>
+            </form>
             <button id="startButton" type="button">Pradėti</button>
           </div>
         </div>
       </div>
+
+      <section class="leaderboard" aria-label="Top žaidėjai">
+        <div class="leaderboard-head">
+          <h2>Top žaidėjai</h2>
+          <button id="refreshLeaderboard" type="button" aria-label="Atnaujinti top žaidėjus">↻</button>
+        </div>
+        <ol id="leaderboardList" class="leaderboard-list"></ol>
+        <p id="leaderboardEmpty" class="leaderboard-empty">Dar nėra rezultatų. Būk pirmas.</p>
+      </section>
 
       <footer class="controls">
         <div class="keyboard-controls" aria-label="Valdymas klaviatūra">

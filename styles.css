@@ -189,8 +189,142 @@ canvas {
   cursor: pointer;
 }
 
+.score-form {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.score-form.is-hidden {
+  display: none;
+}
+
+.score-form label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.score-submit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 8px;
+}
+
+.score-submit input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.score-submit button {
+  margin-top: 0;
+  min-height: 44px;
+}
+
+.score-status {
+  min-height: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .overlay-card button:hover {
   background: var(--green-dark);
+}
+
+.leaderboard {
+  width: min(720px, 100%);
+  justify-self: center;
+  padding: 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(22, 42, 38, 0.08);
+}
+
+.leaderboard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.leaderboard-head h2 {
+  font-size: 20px;
+}
+
+.leaderboard-head button {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 900;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.leaderboard-list {
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  counter-reset: leaderboard;
+}
+
+.leaderboard-list li {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: #f7faf8;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  counter-increment: leaderboard;
+}
+
+.leaderboard-list li::before {
+  content: counter(leaderboard);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 900;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+.leaderboard-name {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-score {
+  font-weight: 900;
+}
+
+.leaderboard-empty {
+  margin-top: 12px;
+  color: var(--muted);
+}
+
+.leaderboard-empty.is-hidden {
+  display: none;
 }
 
 .keyboard-controls,
@@ -271,5 +405,13 @@ kbd,
   .touch-controls button {
     width: 100%;
     height: 48px;
+  }
+
+  .score-submit {
+    grid-template-columns: 1fr;
+  }
+
+  .leaderboard-list li {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
   }
 }
